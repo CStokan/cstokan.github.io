@@ -38,7 +38,7 @@
         // TargetElement.before(elementToInsert);
 
         // To delete
-        Article.remove();
+        //Article.remove();
 
 
     }
