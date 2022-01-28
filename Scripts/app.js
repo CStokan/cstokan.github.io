@@ -38,8 +38,7 @@
         // TargetElement.before(elementToInsert);
 
         // To delete
-        //Article.remove();
-
+        // Article.remove();
 
     }
     
@@ -61,6 +60,59 @@
     function DisplayContactPage()
     {
         console.log("Contact Page");
+
+        let sendButton = document.getElementById("sendButton");
+        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
+
+        sendButton.addEventListener("click", function(event)
+        {
+            // event.preventDefault(); // right now for testing only
+            if(subscribeCheckbox.checked)
+            {
+                let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
+                if(contact.serialize())
+                {
+                    let key = contact.FullName.substring(0, 1) + Date.now();
+                    localStorage.setItem(key, contact.serialize());
+                }
+            }
+        });
+    }
+
+    function DisplayContactListPage()
+    {
+        if(localStorage.length > 0)
+        {
+            let contactList = document.getElementById("contactList");
+
+            let data = "";
+
+            let keys = Object.keys(localStorage); // Returns a list of keys from local storage
+
+            let index = 1;
+
+            // for every key in the keys string array
+            for(const key of keys)
+            {
+                let contactData = localStorage.getItem(key); // get localStorage data value 
+               
+                let contact = new Contact(); // Creates an empty contact
+                contact.deserialize(contactData)
+
+                data += `<tr>
+                <th scope="row" class="text-center">${index}</th>
+                <td>${contact.FullName}</td>
+                <td>${contact.ContactNumber}</td>
+                <td>${contact.EmailAddress}</td>
+                <td></td>
+                <td></td>
+                </tr>`;
+
+                index++;
+            }
+
+            contactList.innerHTML = data;
+        }
     }
 
     // Named function option
@@ -85,9 +137,10 @@
             case "Contact Us":
                 DisplayContactPage();
                 break;
+            case "Contact-List":
+                DisplayContactListPage();
+                break;
         }
-
-
     }
 
 
