@@ -162,6 +162,9 @@
         let sendButton = document.getElementById("sendButton");
         let subscribeCheckbox = document.getElementById("subscribeCheckbox");
 
+        // Hide the showContacts button if not logged in
+        $("#showContacts").hide();
+
         sendButton.addEventListener("click", function(event)
         {
             // event.preventDefault(); // right now for testing only
@@ -375,6 +378,7 @@
         });
     }
 
+    // used to check if the user is logged in
     function checkLogin()
     {
         // if user is logged in
@@ -384,6 +388,9 @@
             $("#login").html(
                 `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
             ); 
+
+            // Show the showcontacts button
+            $("#showContacts").show();
 
             // logout if logged in
             $("#logout").on("click", function()
