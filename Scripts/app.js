@@ -1,3 +1,8 @@
+// Authors: Cooper Stokan and Onur Ozkanca
+// Date: February 27th, 2022
+// Assignment: Lab 2 - jQuery & Form Validation
+
+
 // IIFE -- Immediately Invoked Function Expression
 // AKA -- Anonymous Self-Executing Function
 (function()
@@ -494,6 +499,7 @@
                 newUser.EmailAddress = emailAddress;
                 newUser.Username = firstName + lastName;
                 newUser.Password = password;
+
                 // console log the user
                 console.log(newUser.toString());
                 // clear the login form
