@@ -1,4 +1,4 @@
-"use strict";
+"use strick";
 ((function(){
     
     // Check if user is logged in - if not redirect

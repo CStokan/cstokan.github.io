@@ -41,6 +41,8 @@
 
     }
 
+
+
     /**
      * This function loads the header.html content into the page
      *
@@ -53,6 +55,8 @@
         // Update active link in navbar
         $(`li>a:contains(${document.title})`).addClass("active"); 
 
+
+
         // Check if user is logged in
         checkLogin();
     }
@@ -60,7 +64,7 @@
     function DisplayHomePage()
     {
         console.log("Home Page");
-
+            
         // 1) Fattest Memory Footprint
         // Trying to create the about us button above with jQuery
         // jQuery way - get all elements with an id of AboutUsButton and for each element add a "click" event
@@ -118,10 +122,10 @@
      * @param {RegExp} regular_expression
      * @param {string} error_message
      */
-    function ValidateField(fieldID,regular_expression, error_message)
+    function ValidateField(fieldID,regular_expression, error_message, message_box)
     {
         // Hide the alert message for invalid data
-        let messageArea = $("#messageArea").hide()
+        let messageArea = $(message_box).hide()
         
         // Field Id sent
         $("#" + fieldID).on("blur", function()
@@ -146,9 +150,28 @@
     function ContactFormValidation()
     {
         // Call the validation functions
-        ValidateField("fullName", /^([A-Z][a-z]{1,3}.?\s)?([A-Z][a-z]{1,})((\s|,|-)([A-Z][a-z]{1,}))*(\s|,|-)([A-Z][a-z]{1,})$/, "Please enter a valid Full Name.\n This must include at least a Capitalized First Name and Last Name.");
-        ValidateField("contactNumber", /^(\+\d{1,3}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/, "Please enter a valid Contact Number. Example: (416) 555-5555");
-        ValidateField("emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.");
+        ValidateField("fullName", /^([A-Z][a-z]{1,3}.?\s)?([A-Z][a-z]{1,})((\s|,|-)([A-Z][a-z]{1,}))*(\s|,|-)([A-Z][a-z]{1,})$/, "Please enter a valid Full Name.\n This must include at least a Capitalized First Name and Last Name.", "#messageArea");
+        ValidateField("contactNumber", /^(\+\d{1,3}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/, "Please enter a valid Contact Number. Example: (416) 555-5555", "#messageArea");
+        ValidateField("emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.", "#messageArea");
+        
+    }
+
+    /**
+     * Form validation for the register user
+     * 
+     *@returns {void}
+     */
+    function RegisterFormValidation()
+    {
+        // Call the validation functions
+        ValidateField("emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.", "#ErrorMessage");
+
+        ValidateField("firstName", /^[a-z ,.'-]{2,}$/i, "Please enter a valid First Name", "#ErrorMessage");
+
+        ValidateField("lastName", /^[a-z ,.'-]{2,}$/i, "Please enter a valid Last Name", "#ErrorMessage");
+
+        ValidateField("password", /^[a-zA-Z0-9!.@#$%^&*]{6,}$/, "Please enter a valid password.  Example: 6 or more characters.", "#ErrorMessage"); 
+        ValidateField("confirmPassword", /^[a-zA-Z0-9!.@#$%^&*]{6,}$/, "Please enter a valid password.  Example: 6 or more characters.", "#ErrorMessage");    
         
     }
 
@@ -161,9 +184,6 @@
 
         let sendButton = document.getElementById("sendButton");
         let subscribeCheckbox = document.getElementById("subscribeCheckbox");
-
-        // Hide the showContacts button if not logged in
-        $("#showContacts").hide();
 
         sendButton.addEventListener("click", function(event)
         {
@@ -240,9 +260,11 @@
             {
                 // adds the this.val to the hash 
                 location.href = "edit.html#" + $(this).val();
-            })
+            });
         }
     }
+
+
 
     function DisplayEditPage()
     {
@@ -320,6 +342,10 @@
     function DisplayLoginPage()
     {
         console.log("Login Page");
+
+        // insert div message area
+        $("<div><div>").insertAfter("#whereToInsert").attr('id', "messageArea");
+
         let messageArea =  $("#messageArea");
         messageArea.hide();
 
@@ -328,6 +354,7 @@
             let success = false;
             // create an empty user object
             let newUser = new core.User();
+            
 
             // uses jQuery shortcut to load the users.json file
             $.get("./Data/users.json", function(data)
@@ -378,7 +405,22 @@
         });
     }
 
-    // used to check if the user is logged in
+    /**
+     * This function takes the logged in user and puts there name into the navbar
+     *
+     */
+    function userNameNavBar()
+    {
+        // Added functionality to display users login name
+        let userData = sessionStorage.getItem('user'); // get localStorage data value 
+        let userArray = userData.split(",");
+        console.log($(`
+        <li class="nav-item" id="login">
+            <a class="nav-link" href="#"><i class="fas fa-user"></i> ${userArray[0]}</a>
+        </li>`).insertBefore("#login"));
+    }
+
+
     function checkLogin()
     {
         // if user is logged in
@@ -388,9 +430,8 @@
             $("#login").html(
                 `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
             ); 
-
-            // Show the showcontacts button
-            $("#showContacts").show();
+            
+            userNameNavBar();
 
             // logout if logged in
             $("#logout").on("click", function()
@@ -405,9 +446,65 @@
         }
     }
 
+    /**
+     * Displays the register page
+     * @return {void}
+     */
     function DisplayRegisterPage()
     {
         console.log("Register Page");
+        
+        // Prevent default
+        $("#registerForm").attr("onsubmit", "event.preventDefault()");
+
+        // Insert div into the html
+        $("<div><div>").insertAfter("#whereToInsert").attr('id', "ErrorMessage");
+
+        // Let message area valid
+        let messageArea =  $("#ErrorMessage");
+        messageArea.hide();
+        
+        // Call register form validation
+        RegisterFormValidation();
+        
+
+        // logout if logged in
+        $("#submitButton").on("click", function()
+        {
+            // Get the values
+            let firstName = $("#firstName").val();
+            let lastName = $("#lastName").val();
+            let emailAddress = $("#emailAddress").val();
+            let password = $("#password").val();
+            let confirmPassword = $("#confirmPassword").val();
+            // Makes sure the values have been entered
+            if (firstName === "" || lastName === "" || emailAddress === "")
+            {
+                // Set alert box to danger mode
+                messageArea.addClass("alert alert-danger").text("None of the fields can be empty.").show();
+            }
+            else if(password === confirmPassword && password !== "" && confirmPassword !== "") // Success
+            {
+                // hide any errors
+                messageArea.hide();
+                // Make an instance of user
+                let newUser = new core.User();
+                newUser.FirstName = firstName;
+                newUser.LastName = lastName;
+                newUser.EmailAddress = emailAddress;
+                newUser.Username = firstName + lastName;
+                newUser.Password = password;
+                // console log the user
+                console.log(newUser.toString());
+                // clear the login form
+                document.forms[0].reset();
+            }else // if the passwords do not match
+            {
+                // Set alert box to danger mode
+                messageArea.addClass("alert alert-danger").text("The passwords have to match and cannot be empty.").show();
+            }
+        });
+        
     }
 
     // Named function option

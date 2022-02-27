@@ -42,10 +42,32 @@
             this.m_password = password;
         }
 
-        // Constructor
-        constructor(displayName = "", emailAddres = "", userName = "", password = "")
+        set FirstName(first_name)
         {
-            this.DisplayName = displayName;
+            this.m_firstName = first_name;
+        }
+
+        get FirstName()
+        {
+            return this.m_firstName;
+        }
+
+        set LastName(last_name)
+        {
+            this.m_lastName = last_name;
+        }
+
+        get LastName()
+        {
+            return this.m_lastName;
+        }
+
+
+        // Constructor
+        constructor(firstName = "", lastName = "", emailAddres = "", userName = "", password = "")
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
             this.EmailAddress = emailAddres;
             this.Username = userName;
             this.Password = password;
@@ -55,7 +77,7 @@
         // method overrides
         toString()
         {
-            return `Display Name    : ${this.DisplayName}\nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
+            return `Display Name    : ${this.FirstName}  ${this.LastName}\nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
         }
 
         // Utiility methods
@@ -64,15 +86,18 @@
         toJSON()
         {
             return{
-                "DisplayName": this.DisplayName,
+                "FirstName": this.FirstName,
+                "LastName": this.LastName,
                 "EmailAddress": this.EmailAddress,
-                "Username": this.Username
+                "Username": this.Username,
+                "Password": this.Password
             }
         }
 
         fromJSON(data)
         {
-            this.DisplayName = data.DisplayName;
+            this.FirstName = data.FirstName;
+            this.LastName = data.LastName;
             this.EmailAddress = data.EmailAddress;
             this.Username = data.Username;
             this.Password = data.Password;
@@ -82,9 +107,9 @@
         // Return a string of object or a null
         serialize()
         {
-            if(this.DisplayName !== "" && this.EmailAddress !== "" && this.Username !== "")
+            if(this.FirstName !== "" && this.FirstName !== "" && this.EmailAddress !== "" && this.Username !== "")
             {
-                return `${this.DisplayName},${this.EmailAddress},${this.Username}`;
+                return `${this.FirstName}, ${this.LastName},${this.EmailAddress},${this.Username}`;
             }
             else
             {
@@ -100,9 +125,10 @@
         {
             let propertyArray = data.split(",");
 
-            this.DisplayName = propertyArray[0];
-            this.EmailAddress = propertyArray[1];
-            this.Username = propertyArray[2];
+            this.FirstName = propertyArray[0];
+            this.LastName = propertyArray[1];
+            this.EmailAddress = propertyArray[2];
+            this.Username = propertyArray[3];
         }
 
 
