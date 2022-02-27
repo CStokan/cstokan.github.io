@@ -169,7 +169,7 @@
     function RegisterFormValidation()
     {
         // Call the validation functions
-        ValidateField("emailAddress", /^[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.", "#ErrorMessage");
+        ValidateField("emailAddress", /^[a-zA-Z0-9._-]{2,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.", "#ErrorMessage");
 
         ValidateField("firstName", /^[a-z ,.'-]{2,}$/i, "Please enter a valid First Name", "#ErrorMessage");
 
