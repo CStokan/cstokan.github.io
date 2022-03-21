@@ -1,4 +1,2 @@
-# WEBD6201-W2022-ICE6
-ICE 6 For WEBD6201
-Author: Cooper Stokan
-Date: February 16th, 2022
+# WEBD6201-W2022-Lab-3
+Lab 3 for WEBD6201
